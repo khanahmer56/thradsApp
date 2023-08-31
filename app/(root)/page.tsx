@@ -6,7 +6,7 @@ import { UserButton, currentUser } from "@clerk/nextjs";
 export default async function Home() {
   const result = await fetchposts();
   const user = await currentUser();
-  console.log(result);
+  console.log("hello", result);
   return (
     <div>
       <h1 className="text-white">Home</h1>

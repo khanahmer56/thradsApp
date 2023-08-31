@@ -23,17 +23,28 @@ import { updateuser } from "@/lib/actions/user.actions";
 import { usePathname, useRouter } from "next/navigation";
 import { threadschema } from "@/lib/validation/threads";
 import { createThread } from "@/lib/actions/thread.actions";
+import { useOrganization } from "@clerk/nextjs";
 const PostThread = ({ userId }: any) => {
   const pathname = usePathname();
   const router = useRouter();
+  const { organization } = useOrganization();
 
   const onSubmit = async (data: any) => {
-    createThread({
-      text: data.thread,
-      author: userId,
-      communityId: null,
-      path: pathname,
-    });
+    if (!organization) {
+      createThread({
+        text: data.thread,
+        author: userId,
+        communityId: null,
+        path: pathname,
+      });
+    } else {
+      createThread({
+        text: data.thread,
+        author: userId,
+        communityId: organization.id,
+        path: pathname,
+      });
+    }
     router.push("/");
   };
   const form = useForm({
